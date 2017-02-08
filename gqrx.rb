@@ -2,23 +2,28 @@ require 'formula'
 
 class Gqrx < Formula
   homepage 'https://github.com/csete/gqrx'
-  head 'https://github.com/csete/gqrx.git', :branch => 'master'
-  url 'http://sourceforge.net/projects/gqrx/files/2.3.1/gqrx-2.3.1.tar.gz'
-  sha1 '0669029987329b4cd4332e20f99b099befa44c45'
+  url 'https://github.com/csete/gqrx/archive/v2.6.tar.gz'
+  sha256 '53d25db8d987a41ccccaf6fd85262bd7770cdfab5539b5901c4558756483c9db'
+  head 'https://github.com/csete/gqrx.git'
 
-  depends_on 'cmake' => :build
-  depends_on 'pkg-config' => :build
-  depends_on 'qt'
+  depends_on 'cmake'
+  depends_on 'pkg-config'
+  depends_on 'qt5'
   depends_on 'boost'
   depends_on 'gnuradio'
   depends_on 'gr-osmosdr'
+  depends_on 'gr-iqbal'
 
   def install
     args = "PREFIX=#{prefix}"
     mkdir "build" do
-      system "qmake",  *args, ".."
-      system "make"
+      args = std_cmake_args
+      system 'cmake', '..', *args
+      system 'make'
+      system 'make install'
+      #system "qmake",  *args, ".."
+      #system "make"
     end
-    Dir.glob("build/*.app") { |app| mv app, prefix }
+    #Dir.glob("build/*.app") { |app| mv app, prefix }
   end
 end
