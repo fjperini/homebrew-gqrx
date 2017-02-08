@@ -2,12 +2,15 @@ require 'formula'
 
 class GrOsmosdr < Formula
   homepage 'http://sdr.osmocom.org/trac/wiki/GrOsmoSDR'
+  url 'git://git.osmocom.org/gr-osmosdr'
   head 'git://git.osmocom.org/gr-osmosdr'
 
   depends_on 'cmake' => :build
   depends_on 'gnuradio'
-  depends_on 'rtlsdr' => [:optional, 'with-rtlsdr']
-  depends_on 'bladerf' => [:optional, 'with-bladerf']
+  depends_on 'librtlsdr' => [:optional, 'with-rtlsdr']
+  depends_on 'libbladerf' => [:optional, 'with-bladerf']
+  depends_on 'airspy' => [:optional, 'with-airspy']
+  depends_on 'hackrf' => [:optional, 'with-hackrf']
 
   option 'with-fcd', 'Build with fcd support'
 
@@ -23,7 +26,7 @@ class GrOsmosdr < Formula
   end
 
   def python_path
-    python = Formula.factory('python')
+    python = Formulary.factory('python')
     kegs = python.rack.children.reject { |p| p.basename.to_s == '.DS_Store' }
     kegs.find { |p| Keg.new(p).linked? } || kegs.last
   end

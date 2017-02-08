@@ -2,6 +2,10 @@ require 'formula'
 
 class GrIqbal < Formula
   homepage 'http://sdr.osmocom.org/trac/wiki/GrOsmoSDR'
+  # Use git tag instead of the tarball to get submodules
+  url 'git://git.osmocom.org/gr-iqbal',
+    :tag => "v0.37.2",
+    :revision => "d4fd4dd41ead825a25729021023dda3db51d8b85"
   head 'git://git.osmocom.org/gr-iqbal'
 
   depends_on 'cmake' => :build
@@ -12,8 +16,6 @@ class GrIqbal < Formula
   def install
     mkdir 'build' do
       args = std_cmake_args
-      args << "-DENABLE_FCD=OFF" if build.without? 'fcd'
-      args << "-DPYTHON_LIBRARY=#{python_path}/Frameworks/Python.framework/"
       system 'cmake', '..', *args
       system 'make'
       system 'make install'
@@ -21,7 +23,7 @@ class GrIqbal < Formula
   end
 
   def python_path
-    python = Formula.factory('python')
+    python = Formulary.factory('python')
     kegs = python.rack.children.reject { |p| p.basename.to_s == '.DS_Store' }
     kegs.find { |p| Keg.new(p).linked? } || kegs.last
   end
